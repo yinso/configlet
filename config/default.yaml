@@ -1,0 +1,17 @@
+database: # database config for easydbi
+  user: test
+  password: test
+  database: test
+  host: localhost
+  port: 5432
+  pool:
+    min: 0
+    max: 25
+
+port: 8080
+
+files:
+  - foo.html
+  - bar.html
+  - x.js
+
