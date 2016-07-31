@@ -17,14 +17,14 @@ defaultOpts =
       'local'
     ]
   extMap:
-    '.json': JSON.parse
-    '.yml': jsYaml.safeLoad
-    '.yaml': jsYaml.safeLoad
+    'json': JSON.parse
+    'yml': jsYaml.safeLoad
+    'yaml': jsYaml.safeLoad
 
 readFileSync = (filePath, extParserMap) ->
   for extname, parser of extParserMap
     try
-      data = fs.readFileSync filePath + extname, 'utf8'
+      data = fs.readFileSync filePath + '.' + extname, 'utf8'
       return parser data
     catch e
       continue
@@ -36,7 +36,7 @@ loadSync = (options = {}) ->
   loadOrderFileNames = innerOptions.loadOrder()
   res = {}
   for fileName in loadOrderFileNames
-    res = util.merge res, readFileSync innerOptions.basePath + fileName, innerOptions.extMap
+    res = util.merge res, readFileSync path.join(innerOptions.rootPath, innerOptions.basePath + fileName), innerOptions.extMap
   res
 
 module.exports =

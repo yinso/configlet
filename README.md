@@ -73,23 +73,70 @@ Since this is a sync-version, it means that it blocks until the files are read. 
 
 The following are the parse options to pass into `.parseSync`. The ones that have defaults are listed with `= <default value>`.
 
-### `configBasePath = process.cwd()`
+### `rootPath = process.cwd()`
 
 This can be used to change the default location of the configuration files. This can be changed to say the `$HOME` environment variable to read from user's home directory.
 
-### `configPath = './config/'`
+### `basePath = './config/'`
 
-### `configLoadOrder = function () { return [ < list of file names> ]; }`
+This is the folder + filename prefix to look for within the rootPath, for example, the default is `./config`, which when combined with `rootPath` as well as `loadOrder`, we would look for the following:
 
-This is a function 
+    <rootPath><basePath><loadOrderItem>
 
-### `configExtMap = { <extname>: <parser>, ... }`
+i.e.
+
+    $PWD/config/default
+    $PWD/config/<env>
+    $PWD/config/<hostname>
+    $PWD/config/local
+
+This can be used to add a prefix to load a different set of config files, for example, if we specify `./config/foo-`, we would then be loading the following:
+
+    $PWD/config/foo-default
+    $PWD/config/foo-<env>
+    $PWD/config/foo-<hostname>
+    $PWD/config/foo-local
+
+This is useful for loading a secondary set of configuration files that is completely different from the primary configuration files, i.e. 
+
+    var defaultConfig = Configlet.parseSync(<schema1>, {
+      basePath: './config'
+    });
+
+    var nextConfig = Configlet.parseSync(<fooSchema>, {
+      basePath: './config/foo-'
+    });
+
+For files that share the same schema, use `loadOrder` options to control their loading instead.
+
+### `loadOrder = function () { return [ < list of file names> ]; }`
+
+This is a function that returns the list of the filenames to be used for loading. By default it's list function:
+
+    function () {
+      return [
+        'default',
+	process.env.NODE_ENV || process.env.ENV || 'development',
+	os.hostname(),
+	'local'
+      ];
+    }
+
+You can replace it with your own custom load order function:
+
+    var res = Configlet.parseSync(<schema>, {
+      loadOrder: function () { return [ ... ]; }
+    });
+
+### `extMap = { <extname>: <parser>, ... }`
 
 If you want to support additional config extension formats (like [`json5`](http://json5.org/)), you can introduce it via `configExpMap` as follows:
 
     var JSON5 = require('json5');
     var res = Configlet.parseSync(<schema>, {
-      'json5': JSON5.parse
+      extMap: {
+        'json5': JSON5.parse
+      }
     });
 
 The added formats would be merged with the existing formats, so you can still use `.json` or `.yaml`.
