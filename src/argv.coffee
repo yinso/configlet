@@ -11,11 +11,11 @@ class ArgvVarPath extends Schema.SchemaPath
 
 normalize = (schema, argv = process.argv) ->
   normalized = util.normalizeKeys parseArgv argv
-  console.log 'Argv.normalize', normalized
+  #console.log 'Argv.normalize', normalized
   _normalize schema, normalized, new ArgvVarPath()
 
 _normalize = (schema, obj, path) ->
-  console.log "<#{schema.type}>", obj, path.toString()
+  #console.log "<#{schema.type}>", obj, path.toString()
   switch schema.type
     when 'integer', 'number', 'boolean', 'string', 'null'
       _scalar schema, obj, path

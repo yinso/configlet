@@ -11,15 +11,19 @@ properties:
         type: string
       host:
         type: string
+        default: localhost
       port:
         type: integer
+        default: 5432
       pool:
         type: object
         properties:
           min:
             type: integer
+            default: 0
           max:
             type: integer
+            default: 25
   test:
     type: object
     properties:

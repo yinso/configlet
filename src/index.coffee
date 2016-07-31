@@ -27,12 +27,8 @@ parseSync = (schemaSpec, options = {}) -> # the option
   configVal = file.loadSync options # we can pass in options here.
   envVal = env.normalize schema, options.env
   argvVal = argv.normalize schema, options.argv
-  console.log 'configVal', configVal
-  console.log 'envVal', envVal
-  console.log 'argvVal', argvVal
   merge1 = util.merge configVal, envVal
   merge2 = util.merge merge1, argvVal
-  console.log 'merged', merge2
   schema.convert merge2
 
 module.exports =
