@@ -36,9 +36,9 @@ For example, let's say that we have a schema for the following object:
     {
       database: {
         username: <string>,
-	password: <string>,
-	host: <string>,
-	port: <integer>
+        password: <string>,
+        host: <string>,
+        port: <integer>
       },
     }
 
@@ -116,9 +116,9 @@ This is a function that returns the list of the filenames to be used for loading
     function () {
       return [
         'default',
-	process.env.NODE_ENV || process.env.ENV || 'development',
-	os.hostname(),
-	'local'
+        process.env.NODE_ENV || process.env.ENV || 'development',
+        os.hostname(),
+        'local'
       ];
     }
 
